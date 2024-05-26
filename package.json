@@ -15,6 +15,7 @@
   "author": "Diogo",
   "license": "MIT",
   "dependencies": {
+    "cross-fetch": "^4.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "nedb": "^1.8.0",

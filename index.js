@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const fetch = require('node-fetch');
+
 
 const nedb = require('nedb');
 const dataBase = new nedb('database.db');
