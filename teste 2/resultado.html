@@ -47,7 +47,7 @@
                             for (let i = 0; i < data.length; i++) {
                                 element.append('Latitude : ' + data[i].latitude + "<br>")
                                 element.append('Longitude : ' + data[i].longitude +  "<br>")
-                                element.append('Momento : ' + data[i].timestamp +  "<br><br>")
+                                element.append('Timestamp : ' + data[i].timestamp +  "<br><br>")
                                 var marker = L.marker([data[i].latitude, data[i].longitude]).addTo(map);
                                 
 

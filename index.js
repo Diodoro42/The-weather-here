@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const nedb = require('nedb');
 const dataBase = new nedb('database.db');
@@ -14,7 +14,7 @@ require('dotenv').config();
 
 
 app.listen(port, () =>{
-    console.log('Ouvindo na porta 3000')
+    console.log(`Ouvindo em ${port}`)
     
 })
 
