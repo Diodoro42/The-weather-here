@@ -1,93 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
 
     <title>Document</title>
-
-
-</head>
-<body>
+  </head>
+  <body>
     <h1>Resultados!</h1>
     <a href="index.html">Voltar!</a>
-    <div id="map" style="width: 600px; height: 330px;"></div>
+    <p id="paragrafoTeste">aaaa</p>
+    <div id="map" style="width: 600px; height: 330px"></div>
 
-    <div id="container">
+    <div id="container"></div>
+  </body>
 
-    </div>
-</body>
+  <script>
+    let p = document.getElementById("pHtml");
+    let apiKey = "4481f97ee611d4b39591b768a30220b3";
 
+    async function getData() {
+        //requisição openWeather
+      let response = await fetch("/apiFoda");
+      let data = await response.json();
 
-    <script>
-        let p = document.getElementById('pHtml')
-        let apiKey = "4481f97ee611d4b39591b768a30220b3"
-         async function getData(){
-                            let response = await fetch('/apiFoda')
-                            let data = await response.json()
+      let elementTest = $("<p></p>");
+      
+      console.log(data);
 
+      var map = L.map("map").setView([data[0].latitude, data[0].longitude], 1);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
 
-                            let element = $("<p></p>")
-                            console.log(data)
+      //fazer aqui
 
+      data.forEach(async item => {
+        console.log(item)
+        console.log("Latitude: " + item.latitude)
+        elementTest.append("Latitude: "  + item.latitude + "<br>" + "Longitude: " + item.longitude + "<br>" + "Timestamp: " +  item.timestamp + "<br>" + "<br>")
+        var marker = L.marker([item.latitude, item.longitude]).addTo(map);
+        let weatherData = await getWeatherData(
+          item.latitude,
+          item.longitude,
+          
+        );
 
-                            var map = L.map('map').setView([data[0].latitude, data[0].longitude], 1);
-                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    }).addTo(map);
-                            
-                            for (let i = 0; i < data.length; i++) {
-                                element.append('Latitude : ' + data[i].latitude + "<br>")
-                                element.append('Longitude : ' + data[i].longitude +  "<br>")
-                                element.append('Timestamp : ' + data[i].timestamp +  "<br><br>")
-                                var marker = L.marker([data[i].latitude, data[i].longitude]).addTo(map);
-                                
+        marker
+          .bindPopup(
+            `<b>Localização: ${weatherData.finalData.weather.name}</b><br>Latitude: ${item.latitude}, Longitude: ${item.longitude}, Qualidade do ar (aqi): ${weatherData.finalData.air.list[0].main.aqi}`
+          )
+          
+      }); //fim do forEach
+      
+      
+      $("#container").append(elementTest);
+      
+    
+      console.log(data);
+      console.log(
+        "latitude" + data[0].latitude + " longitude: " + data[0].longitude
+      );
 
-                                let weatherData = await getWeatherData(data[i].latitude, data[i].longitude, element);
-                                console.log(weatherData)
-                                
-                                marker.bindPopup(`<b>Localização: ${weatherData.finalData.weather.name}</b><br>Latitude: ${data[i].latitude}, Longitude: ${data[i].longitude}, Qualidade do ar (aqi): ${weatherData.finalData.air.list[0].main.aqi}`).openPopup();
-                            }
-                            
-                            console.log(data)
-                            console.log("latitude" +data[0].latitude+" longitude: " + data[0].longitude)
-                            
-                            $('#container').append(element)
+     
+    } //final da asynf function
 
-                    
+    async function getWeatherData(lat, lng) {
+      let response = await fetch(`/apiWeather/${lat},${lng}`);
+      let weatherData = await response.json();
+      console.log(weatherData);
+      console.log(weatherData.finalData.weather);
+      return weatherData;
+    }
 
-                        } //final da asynf function
-
-
-
-                        async function getWeatherData(lat, lng, element) {
-            
-                let response = await fetch(`/apiWeather/${lat},${lng}`);
-                let weatherData = await response.json();
-                console.log(weatherData);
-                console.log(weatherData.finalData.weather);
-                return weatherData
-
-                
-
-
-
-                        }
-
-                    getData()
-
-
-                    
-
-    </script>
-
-
+    getData();
+  </script>
 </html>

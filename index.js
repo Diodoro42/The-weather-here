@@ -26,12 +26,14 @@ app.post('/apiFoda', (request, response)=>{
 
     console.log('eu recebi uma requesição POST')
     let data = request.body
-    console.log(data)
+    
     let time = Date.now()
     data.timestamp = time
     
-    console.log(data)
     
+    
+    
+
     dataBase.insert(data)
     response.json({
         status: 'ok POST',
@@ -43,7 +45,7 @@ app.post('/apiFoda', (request, response)=>{
 
 app.get('/apiFoda', (request, response)=>{
     console.log('eu recebi uma requisição GET')
-    console.log(request.body)
+    
     let data = request.body
    
 
@@ -53,7 +55,7 @@ app.get('/apiFoda', (request, response)=>{
             console.log(err)
         } else {
             console.log('tudo certo')
-            console.log(data)
+            
 
             response.json(data)
 
@@ -69,7 +71,7 @@ app.get("/apiWeather/:latlng", async (request, response)=>{
     let latlng = request.params.latlng.split(",")
     let lat = latlng[0]
     let lng = latlng[1]
-    console.log(latlng)
+    
     
     let apiKey = process.env.API_KEY;
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${apiKey}`;
@@ -79,7 +81,7 @@ app.get("/apiWeather/:latlng", async (request, response)=>{
     let responseAir = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lng}&appid=${apiKey}`)
 
     let dataAir = await responseAir.json()
-    console.log("data air:", dataAir)
+    
     
     let finalData = {
         weather: dataWeather,
