@@ -25,7 +25,8 @@
   <body>
     <h1>Resultados!</h1>
     <a href="index.html">Voltar!</a>
-    <p id="paragrafoTeste">aaaa</p>
+    <h2>Clique nos pontos para mais informações!</h2>
+    <p id="paragrafoTeste"></p>
     <div id="map" style="width: 600px; height: 330px"></div>
 
     <div id="container"></div>
@@ -37,14 +38,14 @@
 
     async function getData() {
         //requisição openWeather
-      let response = await fetch("/apiFoda");
+      let response = await fetch("/apiBanco");
       let data = await response.json();
 
       let elementTest = $("<p></p>");
       
       console.log(data);
 
-      var map = L.map("map").setView([data[0].latitude, data[0].longitude], 1);
+      var map = L.map("map").setView([51.505, -0.09], 1);
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution:

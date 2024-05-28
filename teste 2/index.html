@@ -40,7 +40,7 @@
                 body: JSON.stringify(data),
               };
 
-              let response = await fetch("/apiFoda", options);
+              let response = await fetch("/apiBanco", options);
               let informacao = await response.json();
 
               console.log(response);
@@ -50,7 +50,7 @@
             }
 
             async function getData() {
-              let response = await fetch("/apiFoda");
+              let response = await fetch("/apiBanco");
               let data = await response.json();
               console.log(data);
             }

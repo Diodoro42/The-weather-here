@@ -22,31 +22,57 @@ app.listen(port, () =>{
 app.use(express.static('teste 2'));
 app.use(express.json())
 
-app.post('/apiFoda', (request, response)=>{
+app.post("/apiBanco", (request, response)=>{
 
     console.log('eu recebi uma requesição POST')
     let data = request.body
     
-    let time = Date.now()
-    data.timestamp = time
     
     
     
     
+    dataBase.findOne({latitude: data.latitude, longitude: data.longitude},(err, existingEntry) =>{
 
-    dataBase.insert(data)
-    response.json({
-        status: 'ok POST',
-        number: 200,
-        request: request.body
+        if(err){
+            console.log(err)
+            return;
+        }
+
+        if(existingEntry){
+            console.log("Latitude e Longitude encontrada no Banco!")
+            response.json({
+                status: "Duplicado",
+                message: "Latitude e Longitude ja estão no Banco de dados",
+                request: data
+            })
+        } else {
+            let time = Date.now()
+            data.timestamp = time
+            dataBase.insert(data)
+            response.json({
+                status: 'ok POST',
+                number: 200,
+                request: request.body
     })
+        }
+
+    }
+) //final do findOne
+
+    
    
 })
 
-app.get('/apiFoda', (request, response)=>{
+
+
+
+
+
+
+app.get("/apiBanco", (request, response)=>{
     console.log('eu recebi uma requisição GET')
     
-    let data = request.body
+    
    
 
 
@@ -55,7 +81,7 @@ app.get('/apiFoda', (request, response)=>{
             console.log(err)
         } else {
             console.log('tudo certo')
-            
+            console.log( "console atual: " +data)
 
             response.json(data)
 
